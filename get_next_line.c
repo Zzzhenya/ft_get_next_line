@@ -3,6 +3,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
+
+#define BUFFER_SIZE 10
 //char	*get_next_line(int fd);
 
 //ssize_t	read(int fildes, void *buf, size_t nbyte);
@@ -31,7 +33,9 @@ char	*get_next_line(int fd)
 int main(int argc, char **argv)
 {
 	int fd;
+	char *ptr;
 
+	ptr = malloc(sizeof(char) * BUFFER_SIZE);
 	fd = 1;
 	if (argc != 2)
 		return (0);
@@ -40,18 +44,23 @@ int main(int argc, char **argv)
 		fd = open(argv[1], O_RDONLY);
 		if (fd > 0)
 		{
-			char *ptr;
 			printf("fd: %i \n", fd);
 			ptr = get_next_line(fd);
 			write(1, ptr, 100);
-			free(ptr);
 		}
 		else
 		{
 			printf("Error Number % d\n", errno);
 			perror("Program");
 		}
-		return (fd);
 	}
+	free (ptr);
 	return (0);
 }
+/*
+    #ifdef BUFFER_SIZE=n   
+       printf("Debug run\n");
+    #else
+       printf("Release run\n");
+    #endif
+	*/
