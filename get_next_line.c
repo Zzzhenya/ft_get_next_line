@@ -4,9 +4,8 @@
 #include <errno.h>
 #include <stdlib.h>
 
-
-//extern int errno;
-
+#ifdef BUFFER_SIZE
+/*
 extern int errno;
 
 
@@ -15,10 +14,10 @@ char	*get_next_line(int fd)
 	ssize_t ret;
 	void 	*ptr;
 
-	ptr = (void *)malloc(sizeof(char) * 100);
+	ptr = (void *)malloc(sizeof(char) * BUFFER_SIZE);
 	if (!ptr)
 		return (NULL);
-	ret = read(fd, ptr, 100);
+	ret = read(fd, ptr, BUFFER_SIZE);
 	printf("ret :%zd", ret);
 	if (ret != 0) 
 		return((char *)ptr);
@@ -26,27 +25,6 @@ char	*get_next_line(int fd)
 		return (0);
 }
 
-#ifdef BUFFER_SIZE
-
- // do this
-/*
-
-char	*get_next_line(int fd)
-{
-	ssize_t ret;
-	void 	*ptr;
-
-	ptr = (void *)malloc(sizeof(char) * 100);
-	if (!ptr)
-		return (NULL);
-	ret = read(fd, ptr, 100);
-	printf("ret :%zd", ret);
-	if (ret != 0) 
-		return((char *)ptr);
-	else
-		return (0);
-}
-*/
 int main(int argc, char **argv)
 {
 	int fd;
@@ -75,9 +53,28 @@ int main(int argc, char **argv)
 	printf("\n Buffer %d\n", BUFFER_SIZE);
 	return (0);
 }
-
+*/
 #else
-#	define BUFFER_SIZE 10
+#define BUFFER_SIZE 10
+
+extern int errno;
+
+
+char	*get_next_line(int fd)
+{
+	ssize_t ret;
+	void 	*ptr;
+
+	ptr = (void *)malloc(sizeof(char) * BUFFER_SIZE);
+	if (!ptr)
+		return (NULL);
+	ret = read(fd, ptr, BUFFER_SIZE);
+	printf("ret :%zd", ret);
+	if (ret != 0) 
+		return((char *)ptr);
+	else
+		return (0);
+}
 
 
 int main(int argc, char **argv)
