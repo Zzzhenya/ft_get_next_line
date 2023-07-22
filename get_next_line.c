@@ -34,12 +34,15 @@ if line end is in buffer
 char	*get_next_line(int fd)
 {
 	char 				*ptr;
-	static ssize_t	read_bytes;
+	ssize_t	read_bytes;
+	//static ssize_t	read_bytes;
 
+	read_bytes = 0;
 	ptr = (char *)malloc(sizeof(char) * BUFFER_SIZE);
 	if (!ptr)
 		return (NULL);
-	read_bytes = read_bytes + read(fd, ptr, BUFFER_SIZE);
+	read_bytes = read(fd, ptr, BUFFER_SIZE);
+	//read_bytes = read_bytes + read(fd, ptr, BUFFER_SIZE);
 	printf("read_bytes :%zd\n", read_bytes);
 
 /*
