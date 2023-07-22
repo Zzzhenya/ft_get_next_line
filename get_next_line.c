@@ -1,109 +1,56 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
+#include "get_next_line.h"
+
 
 #ifdef BUFFER_SIZE
+
+char	*get_next_line(int fd)
+{
+	char 				*ptr;
+	ssize_t	read_bytes;
+	//static ssize_t	read_bytes;
+
+	read_bytes = 0;
+	ptr = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+	if (!ptr)
+		return (NULL);
+	read_bytes = read(fd, ptr, BUFFER_SIZE);
+	//read_bytes = read_bytes + read(fd, ptr, BUFFER_SIZE);
+	printf("read_bytes :%zd\n", read_bytes);
+
 /*
-extern int errno;
-
-
-char	*get_next_line(int fd)
-{
-	ssize_t ret;
-	void 	*ptr;
-
-	ptr = (void *)malloc(sizeof(char) * BUFFER_SIZE);
-	if (!ptr)
-		return (NULL);
-	ret = read(fd, ptr, BUFFER_SIZE);
-	printf("ret :%zd", ret);
-	if (ret != 0) 
-		return((char *)ptr);
-	else
-		return (0);
-}
-
-int main(int argc, char **argv)
-{
-	int fd;
-	char *ptr;
-
-	ptr = malloc(sizeof(char) * BUFFER_SIZE);
-	fd = 1;
-	if (argc != 2)
-		return (0);
-	if (argc == 2)
-	{
-		fd = open(argv[1], O_RDONLY);
-		if (fd > 0)
-		{
-			printf("fd: %i \n", fd);
-			ptr = get_next_line(fd);
-			write(1, ptr, 100);
-		}
-		else
-		{
-			printf("Error Number % d\n", errno);
-			perror("Program");
-		}
-	}
-	free (ptr);
-	printf("\n Buffer %d\n", BUFFER_SIZE);
-	return (0);
-}
+if line end is not in buffer 
+	add buffer to current line
+if line end is in buffer 
+	add upto line end to current line
 */
+
+
+	return(ptr);
+}
+
 #else
-#define BUFFER_SIZE 10
-
-extern int errno;
-
+# define BUFFER_SIZE 10
 
 char	*get_next_line(int fd)
 {
-	ssize_t ret;
-	void 	*ptr;
+	char 				*ptr;
+	static ssize_t	read_bytes;
 
-	ptr = (void *)malloc(sizeof(char) * BUFFER_SIZE);
+	ptr = (char *)malloc(sizeof(char) * BUFFER_SIZE);
 	if (!ptr)
 		return (NULL);
-	ret = read(fd, ptr, BUFFER_SIZE);
-	printf("ret :%zd", ret);
-	if (ret != 0) 
-		return((char *)ptr);
-	else
-		return (0);
-}
+	read_bytes = read_bytes + read(fd, ptr, BUFFER_SIZE);
+	printf("read_bytes :%zd\n", read_bytes);
+
+/*
+if line end is not in buffer 
+	add buffer to current line
+if line end is in buffer 
+	add upto line end to current line
+*/
 
 
-int main(int argc, char **argv)
-{
-	int fd;
-	char *ptr;
-
-	ptr = malloc(sizeof(char) * BUFFER_SIZE);
-	fd = 1;
-	if (argc != 2)
-		return (0);
-	if (argc == 2)
-	{
-		fd = open(argv[1], O_RDONLY);
-		if (fd > 0)
-		{
-			printf("fd: %i \n", fd);
-			ptr = get_next_line(fd);
-			write(1, ptr, 100);
-		}
-		else
-		{
-			printf("Error Number % d\n", errno);
-			perror("Program");
-		}
-	}
-	free (ptr);
-	printf("\n Buffer %d\n", BUFFER_SIZE);
-	return (0);
+	return(ptr);
 }
 
 #endif
