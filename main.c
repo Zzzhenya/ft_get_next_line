@@ -8,7 +8,8 @@
 
 //extern int errno;
 
-char	*get_next_line(int fd);
+//char	*get_next_line(int fd);
+void	get_next_line(int fd);
 
 int main(int argc, char **argv)
 {
@@ -25,6 +26,7 @@ int main(int argc, char **argv)
 		{
 			printf("fd: %i\n", fd);
 			int i = 0;
+			/*
 			while (i < 6)
 			{
 				printf("\nLine %i : \n", i);
@@ -32,6 +34,11 @@ int main(int argc, char **argv)
 				write(1, ptr, strlen(ptr));
 				i ++;
 			}
+			*/
+			printf("\nLine %i : \n", i);
+			get_next_line(fd);
+			//const char *ptr = get_next_line(fd);
+			//write(1, ptr, strlen(ptr));
 		}
 		//else
 		//{
@@ -39,7 +46,6 @@ int main(int argc, char **argv)
 		//	perror("Program");
 		//}
 	}
-	//free (ptr);
 //	printf("\n Buffer %d\n", BUFFER_SIZE);
 	return (0);
 }
