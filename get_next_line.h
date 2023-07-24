@@ -10,6 +10,5 @@
 # endif
 
 char	*get_next_line(int fd);
-//void	get_next_line(int fd);
 
 #endif

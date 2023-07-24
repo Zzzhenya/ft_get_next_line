@@ -9,7 +9,6 @@
 //extern int errno;
 
 char	*get_next_line(int fd);
-//void	get_next_line(int fd);
 
 int main(int argc, char **argv)
 {
@@ -17,8 +16,11 @@ int main(int argc, char **argv)
 
 	//ptr = malloc(sizeof(char) * BUFFER_SIZE);
 	fd = 1;
-	if (argc != 2 && argc != 1)
+	if (argc < 2)
+	{
+		printf("Where's the text file?\n");
 		return (0);
+	}
 	else if (argc == 2)
 	{
 		fd = open(argv[1], O_RDONLY);
@@ -37,19 +39,20 @@ int main(int argc, char **argv)
 			*/
 			printf("\nLine %i : \n", i);
 			//get_next_line(fd);
-			const char *ptr = get_next_line(fd);
+			char *ptr = get_next_line(fd);
 			write(1, ptr, strlen(ptr));
+			free(ptr);
 		} 
-		else if (fd == 0)
-		{
-			const char *ptr = get_next_line(0);
-			write(1, ptr, strlen(ptr));
-		}
 		//else
 		//{
 		//	printf("Error Number % d\n", errno);
 		//	perror("Program");
 		//}
+	}
+	else
+	{
+		printf("Too many arguments. Can't argue all day!\n");
+		return (0);
 	}
 
 //	printf("\n Buffer %d\n", BUFFER_SIZE);

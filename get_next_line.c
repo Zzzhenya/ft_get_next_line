@@ -1,5 +1,5 @@
 #include "get_next_line.h"
-/*
+
 static size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -60,7 +60,7 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (NULL);
 }
-
+/*
 static char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	len;
@@ -99,33 +99,42 @@ static char	*read_from_file(int fd, char *line)
 */
 
 
+static char	*process_carry_over(char *line, char *carry_over)
+{
+	char	*line_break_loc;
+	char	*temp;
+
+	line_break_loc = 0;
+	temp = 0;
+	if (carry_over)
+	{
+		line_break_loc = ft_strchr(carry_over, '\n');
+		if (line_break_loc)
+		{
+			line = malloc (sizeof(char) * BUFFER_SIZE);
+			if (!line)
+				return (NULL);
+			ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc)));
+			line[(ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1)] = '\n';
+			printf("Carry_over :%s\n", carry_over);
+			printf("Size of line :%zu\n", ft_strlen(line));
+			printf("Size after linebreak loc :%zu\n", ft_strlen(line_break_loc));
+			printf("Size of carry_over :%zu\n", ft_strlen(carry_over));
+		}
+	}
+	return (line);
+}
+
 
 char	*get_next_line(int fd)
 {
+	static char *carry_over;
+	char		*line;
+
+	carry_over = "ABCDE\nFGHI\n!!";
+	line = process_carry_over(line, carry_over);
+//	line = read_from_file();
+//	carry_over = store_balance();
+	return (line);
 	return ("HELLO");
 }
-
-/*
-	if (carry_over is empty)
-		while not '\n' in buffer
-			keep adding the buffer to the line 
-		if '\n' in buffer
-			add until '\n' to line;
-			add a '\n' at line end;
-			add rest to carry_over;
-			return (line)
-	if (carry_over is not empty)
-		add to line until first '\n' or until carry_over is empty
-			if no more '\n' in carry_over
-				while not '\n' in buffer
-					keep adding the buffer to the line 
-				if '\n' in buffer
-					add until '\n' to line;
-					add a '\n' at line end;
-					add rest to carry_over;
-					return (line)
-			while more '\n' in carry_over
-				keep the rest in carry_over
-				don't empty the carry_over
-				return (line)
-*/
