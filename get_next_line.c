@@ -1,5 +1,5 @@
 #include "get_next_line.h"
-
+/*
 static size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -61,60 +61,50 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-//char	*get_next_line(int fd)
-void	get_next_line(int fd)
+static char	*ft_strjoin(char const *s1, char const *s2)
 {
-	static char *carry_over;
-	char		*line;
-	char		*next_line_loc;
-	char		*buff;
-	char		*temp;
+	size_t	len;
+	char	*ptr;
 
-	next_line_loc = NULL;
-	if (carry_over == NULL)
-	{
-		printf("Nothing Here\n");
-		buff = malloc(sizeof(char) * BUFFER_SIZE);
-		read(fd, buff, BUFFER_SIZE);
-		printf("buff: %s\n", buff);
-		next_line_loc = ft_strchr(buff, '\n');
-		printf("next_line_loc: %s\n", next_line_loc);
-		if (next_line_loc == NULL)
-		{
-			line = malloc(sizeof(char) * BUFFER_SIZE + 1);
-			ft_strlcpy(line, buff, (BUFFER_SIZE * 2) + 1);
-			free(buff);
-		}
-		
-		while (next_line_loc == NULL)
-		{
-			//printf("next_line_loc: %s\n", next_line_loc);
-			temp = malloc(sizeof(char) * ft_strlen(line) + 1);
-			ft_strlcpy(temp, line, ft_strlen(line) + 1);
-			//printf("temp: %s\n", temp);
-			free (line);
-			buff = malloc(sizeof(char) * BUFFER_SIZE);
-			read(fd, buff, BUFFER_SIZE);
-			next_line_loc = ft_strchr(line, '\n');
-			line = malloc(sizeof(char) * ft_strlen(temp) + BUFFER_SIZE + 1);
-			ft_strlcpy(line, temp, ft_strlen(temp) + 1);
-			free(temp);
-			ft_strlcat(line, buff, (ft_strlen(line) + BUFFER_SIZE) + 1);
-			free(buff);
-			if (next_line_loc != NULL)
-			{
-				carry_over = malloc(sizeof(char) * ft_strlen(next_line_loc));
-				ft_strlcpy(carry_over, temp, ft_strlen(temp));
-				printf("line: %s\n", line);
-			}
-		}
-		
-	//	return (line);
-		printf("line: %s\n", line);
-	}
+	len = ft_strlen(s1) + ft_strlen(s2);
+	ptr = malloc((len + 1) * sizeof(char));
+	if (!ptr)
+		return (NULL);
 	else
-		printf("carry_over: %s\n",carry_over);
-	//	return(carry_over);
+	{
+		ft_strlcpy(ptr, s1, ft_strlen(s1) + 1);
+		ft_strlcpy(ptr + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+		return (ptr);
+	}
+}
+
+
+static char	*read_from_file(int fd, char *line)
+{
+	ssize_t	read_bytes;
+	char	*buff;
+
+	buff = malloc (sizeof(char) * BUFFER_SIZE);
+	if (!buff)
+		return (NULL);
+	read_bytes = read(fd, buff, BUFFER_SIZE);
+	if (read_bytes <= 0)
+		return (NULL);
+	while (buff[i] != '\n' && buff[i] != EOF)
+	{
+		line[i] = buff[i]
+		i ++;
+	}
+}
+*/
+
+
+
+char	*get_next_line(int fd)
+{
+	return ("HELLO");
+}
+
 /*
 	if (carry_over is empty)
 		while not '\n' in buffer
@@ -139,4 +129,3 @@ void	get_next_line(int fd)
 				don't empty the carry_over
 				return (line)
 */
-}

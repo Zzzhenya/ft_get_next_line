@@ -9,7 +9,7 @@
 #  define BUFFER_SIZE 5
 # endif
 
-//char	*get_next_line(int fd);
-void	get_next_line(int fd);
+char	*get_next_line(int fd);
+//void	get_next_line(int fd);
 
 #endif

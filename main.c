@@ -8,8 +8,8 @@
 
 //extern int errno;
 
-//char	*get_next_line(int fd);
-void	get_next_line(int fd);
+char	*get_next_line(int fd);
+//void	get_next_line(int fd);
 
 int main(int argc, char **argv)
 {
@@ -17,9 +17,9 @@ int main(int argc, char **argv)
 
 	//ptr = malloc(sizeof(char) * BUFFER_SIZE);
 	fd = 1;
-	if (argc != 2)
+	if (argc != 2 && argc != 1)
 		return (0);
-	if (argc == 2)
+	else if (argc == 2)
 	{
 		fd = open(argv[1], O_RDONLY);
 		if (fd > 0)
@@ -36,9 +36,14 @@ int main(int argc, char **argv)
 			}
 			*/
 			printf("\nLine %i : \n", i);
-			get_next_line(fd);
-			//const char *ptr = get_next_line(fd);
-			//write(1, ptr, strlen(ptr));
+			//get_next_line(fd);
+			const char *ptr = get_next_line(fd);
+			write(1, ptr, strlen(ptr));
+		} 
+		else if (fd == 0)
+		{
+			const char *ptr = get_next_line(0);
+			write(1, ptr, strlen(ptr));
 		}
 		//else
 		//{
@@ -46,6 +51,7 @@ int main(int argc, char **argv)
 		//	perror("Program");
 		//}
 	}
+
 //	printf("\n Buffer %d\n", BUFFER_SIZE);
 	return (0);
 }
