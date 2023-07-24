@@ -9,7 +9,7 @@ static size_t	ft_strlen(const char *s)
 		len ++;
 	return (len);
 }
-
+/*
 static size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
 	size_t	i;
@@ -23,12 +23,11 @@ static size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	{
 		dst[i + j] = src[j];
 		j ++;
-	}
 	if (i < size)
 		dst[i + j] = '\0';
 	return (i + ft_strlen(src));
 }
-
+*/
 static size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {	
 	size_t	i;
@@ -105,21 +104,29 @@ static char	*process_carry_over(char *line, char *carry_over)
 	char	*temp;
 
 	line_break_loc = 0;
-	temp = 0;
 	if (carry_over)
 	{
 		line_break_loc = ft_strchr(carry_over, '\n');
 		if (line_break_loc)
 		{
-			line = malloc (sizeof(char) * BUFFER_SIZE);
+			line = malloc (sizeof(char) *  (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
 			if (!line)
 				return (NULL);
-			ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc)));
-			line[(ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1)] = '\n';
-			printf("Carry_over :%s\n", carry_over);
+			ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
+			//carry_over = carry_over + (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1 );
+
+			printf("Carry_over :%s:END\n", carry_over);
 			printf("Size of line :%zu\n", ft_strlen(line));
 			printf("Size after linebreak loc :%zu\n", ft_strlen(line_break_loc));
 			printf("Size of carry_over :%zu\n", ft_strlen(carry_over));
+		}
+		else
+		{
+			//line = malloc (sizeof(char) *  (ft_strlen(carry_over) + 2));
+			//if (!line)
+			//	return (NULL);
+			//ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
+			//carry_over = carry_over + (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1 );
 		}
 	}
 	return (line);
@@ -131,8 +138,13 @@ char	*get_next_line(int fd)
 	static char *carry_over;
 	char		*line;
 
-	carry_over = "ABCDE\nFGHI\n!!";
+	line = NULL;
+	carry_over = malloc (sizeof(char) * 10);
+	carry_over = "ABCDE\nFGHI";
+	printf("fd : %i\n", fd);
 	line = process_carry_over(line, carry_over);
+	
+	
 //	line = read_from_file();
 //	carry_over = store_balance();
 	return (line);
