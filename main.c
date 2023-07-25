@@ -28,20 +28,22 @@ int main(int argc, char **argv)
 		{
 			printf("fd: %i\n", fd);
 			int i = 0;
-			/*
-			while (i < 6)
+
+			while (i < 2)
 			{
 				printf("\nLine %i : \n", i);
-				const char *ptr = get_next_line(fd);
+				char *ptr = get_next_line(fd);
 				write(1, ptr, strlen(ptr));
+				free(ptr);
 				i ++;
 			}
-			*/
+			/*
 			printf("\nLine %i : \n", i);
 			//get_next_line(fd);
 			char *ptr = get_next_line(fd);
 			write(1, ptr, strlen(ptr));
-			free(ptr);
+			*/
+			
 		} 
 		//else
 		//{

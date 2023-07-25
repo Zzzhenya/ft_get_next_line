@@ -59,7 +59,7 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (NULL);
 }
-/*
+
 static char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	len;
@@ -68,7 +68,10 @@ static char	*ft_strjoin(char const *s1, char const *s2)
 	len = ft_strlen(s1) + ft_strlen(s2);
 	ptr = malloc((len + 1) * sizeof(char));
 	if (!ptr)
+	{
+		free ((void *)s2);
 		return (NULL);
+	}
 	else
 	{
 		ft_strlcpy(ptr, s1, ft_strlen(s1) + 1);
@@ -77,74 +80,123 @@ static char	*ft_strjoin(char const *s1, char const *s2)
 	}
 }
 
-
 static char	*read_from_file(int fd, char *line)
 {
 	ssize_t	read_bytes;
 	char	*buff;
+	char	*temp;
 
-	buff = malloc (sizeof(char) * BUFFER_SIZE);
-	if (!buff)
-		return (NULL);
-	read_bytes = read(fd, buff, BUFFER_SIZE);
-	if (read_bytes <= 0)
-		return (NULL);
-	while (buff[i] != '\n' && buff[i] != EOF)
+	buff = 0;
+	temp = 0;
+	while (!ft_strchr(buff, '\n'))
 	{
-		line[i] = buff[i]
-		i ++;
+		buff = malloc (sizeof(char) * BUFFER_SIZE);
+		if (!buff)
+		{
+			free (line);
+			return (NULL);
+		}
+		read_bytes = read(fd, buff, BUFFER_SIZE);
+		if (read_bytes <= 0)
+		{
+			free (buff);
+			free (line);
+			return (NULL);
+		}
+		temp = malloc (sizeof(char) * ft_strlen(line) + 1);
+		if (!temp)
+		{
+			free (buff);
+			free (line);
+			return (NULL);
+		}
+		ft_strlcpy(temp, line, ft_strlen(line));
+		free (line);
+		//line = malloc (sizeof(char) *  (ft_strlen(temp) + ft_strlen(line) + 2));
+		//if (!line)
+		//{
+		//	free (buff);
+		//	return (NULL);
+		//}
+		line = ft_strjoin(temp, buff);
+		free(temp);
+		free(buff);
 	}
+	return(line);
 }
-*/
-
 
 static char	*process_carry_over(char *line, char *carry_over)
 {
 	char	*line_break_loc;
 	char	*temp;
 
+	temp = 0;
 	line_break_loc = 0;
-	if (carry_over)
+	line_break_loc = ft_strchr(carry_over, '\n');
+	if (!line_break_loc)
 	{
-		line_break_loc = ft_strchr(carry_over, '\n');
-		if (line_break_loc)
+		line = malloc (sizeof(char) * (ft_strlen(carry_over) + 1));
+		if (!line)
+			return (NULL);
+		ft_strlcpy(line, carry_over, ft_strlen(carry_over) + 1);
+		carry_over = 0; /* comment this
+		// Uncomment this once the carry_over creation at the end of reading is done! Can't free what's not malloc'd
+		//free (carry_over); 
+		
+		printf("_________________No line break in carry over\n");
+		printf("Carry_over :%s:END\n", carry_over);
+		printf("temp :%s:END\n", temp);
+		printf("Size of line :%zu\n", ft_strlen(line)); */
+	}
+	else 
+	{
+		line = malloc (sizeof(char) *  (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
+		if (!line)
+			return (NULL);
+		ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1));
+		temp = malloc (sizeof(char) * ft_strlen(line_break_loc) + 1);
+		if (!temp)
 		{
-			line = malloc (sizeof(char) *  (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
-			if (!line)
-				return (NULL);
-			ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
-			//carry_over = carry_over + (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1 );
-
-			printf("Carry_over :%s:END\n", carry_over);
-			printf("Size of line :%zu\n", ft_strlen(line));
-			printf("Size after linebreak loc :%zu\n", ft_strlen(line_break_loc));
-			printf("Size of carry_over :%zu\n", ft_strlen(carry_over));
+			free (line);
+			return (NULL);
 		}
-		else
+		ft_strlcpy(temp, carry_over + ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1, ft_strlen(line_break_loc));
+		// Uncomment this once the carry_over creation at the end of reading is done! Can't free what's not malloc'd
+		//free (carry_over);
+		carry_over = malloc (sizeof(char) * ft_strlen(line_break_loc));
+		if (!carry_over)
 		{
-			//line = malloc (sizeof(char) *  (ft_strlen(carry_over) + 2));
-			//if (!line)
-			//	return (NULL);
-			//ft_strlcpy(line, carry_over, (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 2));
-			//carry_over = carry_over + (ft_strlen(carry_over) - ft_strlen(line_break_loc) + 1 );
+			free (temp);
+			free (line);
+			return (NULL);
 		}
+		ft_strlcpy(carry_over, temp, ft_strlen(line_break_loc));
+		free (temp); /*
+		printf("_________________Line break in carry over\n");
+		printf("Carry_over :%s:END\n", carry_over);
+		printf("temp :%s:END\n", temp);
+		printf("Size of line :%zu\n", ft_strlen(line));
+		printf("Size after linebreak loc :%zu\n", ft_strlen(line_break_loc));
+		printf("Size of carry_over :%zu\n", ft_strlen(carry_over));
+		printf("Size of temp :%zu\n", ft_strlen(temp)); */
 	}
 	return (line);
 }
-
 
 char	*get_next_line(int fd)
 {
 	static char *carry_over;
 	char		*line;
-
+	//carry_over = "ABCDE\nFGH";
+	
 	line = NULL;
-	carry_over = malloc (sizeof(char) * 10);
-	carry_over = "ABCDE\nFGHI";
 	printf("fd : %i\n", fd);
-	line = process_carry_over(line, carry_over);
-	
-	
+	if (carry_over)
+		line = process_carry_over(line, carry_over);
+	else
+		line = malloc (sizeof(char) * BUFFER_SIZE + 1);
+	if (!ft_strchr(line, '\n'))
+		line = read_from_file(fd, line);
 //	line = read_from_file();
 //	carry_over = store_balance();
 	return (line);
