@@ -5,10 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "get_next_line.h"
-
+#include "get_next_line_utils.c"
 //extern int errno;
 
 char	*get_next_line(int fd);
+void	*ft_calloc(size_t nmemb, size_t size);
+size_t	ft_strlen(const char *s);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+char	*ft_strchr(const char *s, int c);
 
 int main(int argc, char **argv)
 {
@@ -27,16 +31,18 @@ int main(int argc, char **argv)
 		if (fd > 0)
 		{
 			printf("fd: %i\n", fd);
-			int i = 0;
-
-			while (i < 2)
+			
+			int i = 1;
+			char *ptr = "Start";
+			while (ptr)
 			{
-				printf("\nLine %i : \n", i);
-				char *ptr = get_next_line(fd);
-				write(1, ptr, strlen(ptr));
+				ptr = get_next_line(fd);
+				printf("Line%i:%s\n", i, ptr);
+//				write(1, ptr, strlen(ptr));
 				free(ptr);
 				i ++;
 			}
+			
 			/*
 			printf("\nLine %i : \n", i);
 			//get_next_line(fd);
