@@ -98,7 +98,7 @@ char	*get_next_line(int fd)
 			ft_strlcpy(carry_over, lb + 1, ft_strlen(lb));
 			line = post_process(line, lb);
 		}
-//		return (line);
+		return (line);
 	}
 	return (line);
 }
