@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sde-silv <sde-silv@student.42berlin.de     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/31 15:23:59 by sde-silv          #+#    #+#             */
+/*   Updated: 2023/07/31 15:34:40 by sde-silv         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*ft_strjoin_fr(char const *s1, char const *s2)
@@ -9,6 +21,7 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 	ptr = malloc((len + 1) * sizeof(char));
 	if (!ptr)
 	{
+		free ((void *)s1);
 		free ((void *)s2);
 		return (NULL);
 	}
@@ -16,6 +29,8 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 	{
 		ft_strlcpy(ptr, s1, ft_strlen(s1) + 1);
 		ft_strlcpy(ptr + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+		free ((void *)s1);
+		free ((void *)s2);
 		return (ptr);
 	}
 }
@@ -29,23 +44,24 @@ char	*read_from_file(int fd, char *line)
 	read_bytes = 1;
 	while (!ft_strchr(line, '\n'))
 	{
-		buff = ft_calloc (BUFFER_SIZE + 2, sizeof(char));
+		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
 		if (!buff)
 			return (NULL);
 		read_bytes = read(fd, buff, BUFFER_SIZE);
 		if (read_bytes <= 0)
 		{
 			free (buff);
+			if (line)
+				free (line);
 			return (NULL);
 		}
 		line = ft_strjoin_fr (line, buff);
-		free (buff);
+		//free (buff);
 		if (read_bytes < BUFFER_SIZE)
 			return (line);
 	}
 	return (line);
 }
-
 
 char	*post_process(char *line, char *lb)
 {
@@ -61,19 +77,22 @@ char	*post_process(char *line, char *lb)
 
 char	*get_next_line(int fd)
 {
-	static char *carry_over;
+	static char	*carry_over;
 	char		*line;
 	char		*lb;
-	
+
 	line = 0;
 	lb = 0;
-	if (!fd || fd < 0)
+	if (fd < 0)
 		return (NULL);
 	if (carry_over != 0)
 	{
 		line = ft_calloc(ft_strlen(carry_over) + 1, sizeof(char));
 		if (!line)
-			return(NULL);
+		{
+			free (carry_over);
+			return (NULL);
+		}
 		ft_strlcpy(line, carry_over, ft_strlen(carry_over) + 1);
 		free (carry_over);
 	}
@@ -81,15 +100,16 @@ char	*get_next_line(int fd)
 	{
 		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 		if (!line)
+		{
 			return (NULL);
+		}
 	}
 	line = read_from_file(fd, line);
-	//if (ft_strchr(line, '\n'))
 	if (line)
 	{
 		lb = ft_strchr(line, '\n');
-		if (!lb)
-			carry_over = ft_calloc( 1, sizeof(char));
+		if (!lb ) //&& ft_strlen(line) == 0)
+			carry_over = ft_calloc(1, sizeof(char));
 		else
 		{
 			carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
