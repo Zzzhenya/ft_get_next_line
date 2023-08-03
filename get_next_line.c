@@ -18,7 +18,8 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 	char	*ptr;
 
 	len = ft_strlen(s1) + ft_strlen(s2);
-	ptr = malloc((len + 1) * sizeof(char));
+	//ptr = malloc((len + 1) * sizeof(char));
+	ptr = ft_calloc((len + 1), sizeof(char));
 	if (!ptr)
 	{
 		free ((void *)s1);
