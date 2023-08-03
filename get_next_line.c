@@ -45,10 +45,11 @@ char	*read_from_file(int fd, char *line)
 	read_bytes = 1;
 	while (!ft_strchr(line, '\n'))
 	{
-		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
+		buff = ft_calloc (BUFFER_SIZE + 2, sizeof(char));
 		if (!buff)
 			return (NULL);
 		read_bytes = read(fd, buff, BUFFER_SIZE);
+		//printf("%s", buff);
 		if (read_bytes <= 0)
 		{
 			free (buff);
@@ -57,10 +58,12 @@ char	*read_from_file(int fd, char *line)
 			return (NULL);
 		}
 		line = ft_strjoin_fr (line, buff);
+		//printf("%s", line);
 		//free (buff);
 		if (read_bytes < BUFFER_SIZE)
 			return (line);
 	}
+	//printf("%s", line);
 	return (line);
 }
 
@@ -68,10 +71,10 @@ char	*post_process(char *line, char *lb)
 {
 	char	*temp;
 
-	temp = ft_calloc(ft_strlen(line) - ft_strlen(lb + 1) + 1, sizeof(char));
+	temp = ft_calloc(ft_strlen(line) - ft_strlen(lb) + 2, sizeof(char));
 	if (!temp)
 		return (NULL);
-	ft_strlcpy(temp, line, ft_strlen(line) - ft_strlen(lb + 1));
+	ft_strlcpy(temp, line, ft_strlen(line) - ft_strlen(lb) + 2);
 	free (line);
 	return (temp);
 }
@@ -99,7 +102,7 @@ char	*get_next_line(int fd)
 	}
 	else
 	{
-		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+		line = ft_calloc(BUFFER_SIZE + 2, sizeof(char));
 		if (!line)
 		{
 			return (NULL);
@@ -110,7 +113,9 @@ char	*get_next_line(int fd)
 	{
 		lb = ft_strchr(line, '\n');
 		if (!lb ) //&& ft_strlen(line) == 0)
+		{
 			carry_over = ft_calloc(1, sizeof(char));
+		}
 		else
 		{
 			carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
@@ -118,6 +123,7 @@ char	*get_next_line(int fd)
 				return (NULL);
 			ft_strlcpy(carry_over, lb + 1, ft_strlen(lb));
 			line = post_process(line, lb);
+
 		}
 		return (line);
 	}
