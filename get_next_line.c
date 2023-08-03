@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-silv <sde-silv@student.42berlin.de     +#+  +:+       +#+        */
+/*   By: sde-silv <sde-silv@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 15:23:59 by sde-silv          #+#    #+#             */
 /*   Updated: 2023/07/31 15:34:40 by sde-silv         ###   ########.fr       */
@@ -18,7 +18,6 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 	char	*ptr;
 
 	len = ft_strlen(s1) + ft_strlen(s2);
-	//ptr = malloc((len + 1) * sizeof(char));
 	ptr = ft_calloc((len + 1), sizeof(char));
 	if (!ptr)
 	{
@@ -46,11 +45,9 @@ char	*read_from_file(int fd, char *line)
 	while (!ft_strchr(line, '\n'))
 	{
 		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
-		//buff = ft_calloc (BUFFER_SIZE + 2, sizeof(char));
 		if (!buff)
 			return (NULL);
 		read_bytes = read(fd, buff, BUFFER_SIZE);
-		//printf("%s", buff);
 		if (read_bytes <= 0)
 		{
 			free (buff);
@@ -59,12 +56,9 @@ char	*read_from_file(int fd, char *line)
 			return (NULL);
 		}
 		line = ft_strjoin_fr (line, buff);
-		//printf("%s", line);
-		//free (buff);
 		if (read_bytes < BUFFER_SIZE)
 			return (line);
 	}
-	//printf("%s", line);
 	return (line);
 }
 
@@ -103,31 +97,29 @@ char	*get_next_line(int fd)
 	}
 	else
 	{
-		//line = ft_calloc(BUFFER_SIZE + 2, sizeof(char));
 		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 		if (!line)
-		{
 			return (NULL);
-		}
 	}
 	line = read_from_file(fd, line);
 	if (line)
 	{
 		lb = ft_strchr(line, '\n');
 		if (!lb ) //&& ft_strlen(line) == 0)
-		{
 			carry_over = ft_calloc(1, sizeof(char));
-		}
 		else
 		{
 			carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
 			if (!carry_over)
+			{
+				free (line);
 				return (NULL);
+			}
 			ft_strlcpy(carry_over, lb + 1, ft_strlen(lb));
 			line = post_process(line, lb);
 
 		}
-		return (line);
+	//	return (line);
 	}
 	return (line);
 }
