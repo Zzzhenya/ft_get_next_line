@@ -45,7 +45,8 @@ char	*read_from_file(int fd, char *line)
 	read_bytes = 1;
 	while (!ft_strchr(line, '\n'))
 	{
-		buff = ft_calloc (BUFFER_SIZE + 2, sizeof(char));
+		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
+		//buff = ft_calloc (BUFFER_SIZE + 2, sizeof(char));
 		if (!buff)
 			return (NULL);
 		read_bytes = read(fd, buff, BUFFER_SIZE);
@@ -102,7 +103,8 @@ char	*get_next_line(int fd)
 	}
 	else
 	{
-		line = ft_calloc(BUFFER_SIZE + 2, sizeof(char));
+		//line = ft_calloc(BUFFER_SIZE + 2, sizeof(char));
+		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 		if (!line)
 		{
 			return (NULL);

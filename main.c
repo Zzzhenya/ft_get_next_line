@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "get_next_line.h"
 #include "get_next_line_utils.c"
 //extern int errno;
@@ -18,6 +19,8 @@ int main(int argc, char **argv)
 {
 	int fd;
 
+	printf("Open_max: %d\n", OPEN_MAX);
+	printf("Fopen_max: %d\n", FOPEN_MAX);
 	//ptr = malloc(sizeof(char) * BUFFER_SIZE);
 	fd = 1;
 	if (argc < 2)
@@ -37,7 +40,7 @@ int main(int argc, char **argv)
 			while (ptr)
 			{
 				ptr = get_next_line(fd);
-				printf("Line%i:%s\n", i, ptr);
+				printf("Line%i:%s", i, ptr);
 //				write(1, ptr, strlen(ptr));
 				free(ptr);
 				i ++;
