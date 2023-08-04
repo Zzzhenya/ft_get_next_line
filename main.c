@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 			while (ptr)
 			{
 				ptr = get_next_line(fd);
-				printf("Line%i:%s", i, ptr);
+				printf("%i:%s", i, ptr);
 //				write(1, ptr, strlen(ptr));
 				free(ptr);
 				i ++;
