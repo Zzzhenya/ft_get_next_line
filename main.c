@@ -11,18 +11,18 @@
 
 char	*get_next_line(int fd);
 void	*ft_calloc(size_t nmemb, size_t size);
-size_t	ft_strlen(const char *s);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-char	*ft_strchr(const char *s, int c);
+//size_t	ft_strlen(const char *s);
+//size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+//char	*ft_strchr(const char *s, int c);
 
 int main(int argc, char **argv)
 {
 	int fd;
 
-	printf("Open_max: %d\n", OPEN_MAX);
-	printf("Fopen_max: %d\n", FOPEN_MAX);
+	//printf("Open_max: %d\n", OPEN_MAX);
+	//printf("Fopen_max: %d\n", FOPEN_MAX);
 	//ptr = malloc(sizeof(char) * BUFFER_SIZE);
-	fd = 1;
+	fd = 0;
 	if (argc < 2)
 	{
 		printf("Where's the text file?\n");
@@ -33,14 +33,14 @@ int main(int argc, char **argv)
 		fd = open(argv[1], O_RDONLY);
 		if (fd > 0)
 		{
-			printf("fd: %i\n", fd);
+			//printf("fd: %i\n", fd);
 			
 			int i = 1;
 			char *ptr = "Start";
 			while (ptr)
 			{
 				ptr = get_next_line(fd);
-				printf("%i:%s", i, ptr);
+				printf("%d%s\n",i,ptr);
 //				write(1, ptr, strlen(ptr));
 				free(ptr);
 				i ++;
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
 			char *ptr = get_next_line(fd);
 			write(1, ptr, strlen(ptr));
 			*/
-			
-		} 
+			close(fd);
+		}
 		//else
 		//{
 		//	printf("Error Number % d\n", errno);

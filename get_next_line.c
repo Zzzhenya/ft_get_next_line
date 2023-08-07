@@ -35,91 +35,28 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 	}
 }
 
-char	*read_from_file(int fd, char *line)
+char	*get_next_line(int fd)
 {
-	char	*buff;
-	int		read_bytes;
+//	static char	*carry_over;
+	char		*buff = 0;
+	char		*line = 0;
+	int		bytes_read = 0;
 
-	buff = 0;
-	read_bytes = 1;
+	if (fd < 0)
+		return (NULL);
 	while (!ft_strchr(line, '\n'))
 	{
 		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
 		if (!buff)
 			return (NULL);
-		read_bytes = read(fd, buff, BUFFER_SIZE);
-		if (read_bytes <= 0)
+		bytes_read = read(fd, buff, BUFFER_SIZE);
+		printf("%s", buff);
+		if (bytes_read < 0)
 		{
 			free (buff);
-			if (line)
-				free (line);
-			return (NULL);
+    		return (NULL);
 		}
-		line = ft_strjoin_fr (line, buff);
-		if (read_bytes < BUFFER_SIZE)
-			return (line);
-	}
-	return (line);
-}
-
-char	*post_process(char *line, char *lb)
-{
-	char	*temp;
-
-	temp = ft_calloc(ft_strlen(line) - ft_strlen(lb) + 2, sizeof(char));
-	if (!temp)
-		return (NULL);
-	ft_strlcpy(temp, line, ft_strlen(line) - ft_strlen(lb) + 2);
-	free (line);
-	return (temp);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*carry_over;
-	char		*line;
-	char		*lb;
-
-	line = 0;
-	lb = 0;
-	if (fd < 0)
-		return (NULL);
-	if (carry_over != 0)
-	{
-		line = ft_calloc(ft_strlen(carry_over) + 1, sizeof(char));
-		if (!line)
-		{
-			free (carry_over);
-			return (NULL);
-		}
-		ft_strlcpy(line, carry_over, ft_strlen(carry_over) + 1);
-		free (carry_over);
-	}
-	else
-	{
-		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (!line)
-			return (NULL);
-	}
-	line = read_from_file(fd, line);
-	if (line)
-	{
-		lb = ft_strchr(line, '\n');
-		if (!lb ) //&& ft_strlen(line) == 0)
-			carry_over = ft_calloc(1, sizeof(char));
-		else
-		{
-			carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
-			if (!carry_over)
-			{
-				free (line);
-				return (NULL);
-			}
-			ft_strlcpy(carry_over, lb + 1, ft_strlen(lb));
-			line = post_process(line, lb);
-
-		}
-	//	return (line);
+		line = ft_strjoin_fr(line, buff);
 	}
 	return (line);
 }
