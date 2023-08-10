@@ -19,8 +19,8 @@ int main(int argc, char **argv)
 {
 	int fd;
 
-	printf("Open_max: %d\n", OPEN_MAX);
-	printf("Fopen_max: %d\n", FOPEN_MAX);
+//	printf("Open_max: %d\n", OPEN_MAX);
+//	printf("Fopen_max: %d\n", FOPEN_MAX);
 	//ptr = malloc(sizeof(char) * BUFFER_SIZE);
 	fd = 1;
 	if (argc < 2)
