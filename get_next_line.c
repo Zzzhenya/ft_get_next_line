@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_strjoin_fr(char const *s1, char const *s2)
+char	*ft_strjoin_fr(char *s1, char const *s2)
 {
 	size_t	len;
 	char	*ptr;
@@ -21,7 +21,7 @@ char	*ft_strjoin_fr(char const *s1, char const *s2)
 		//s1 = ft_calloc(1, sizeof(char));
 	{
 		s1 = malloc(1 * sizeof(char));
-		// s1[0] = '\0'; 
+		s1[0] = '\0'; 
 	}
 	len = ft_strlen(s1) + ft_strlen(s2);
 	//ptr = ft_calloc((len + 1), sizeof(char));
@@ -122,6 +122,8 @@ char	*get_next_line(int fd)
 		{
 			//carry_over = ft_calloc(1, sizeof(char));
 			carry_over = malloc(1 * sizeof(char));
+			if (!carry_over)
+				return (NULL);
 			carry_over[0] = '\0';
 		}
 		else
