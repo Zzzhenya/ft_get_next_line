@@ -86,11 +86,10 @@ char	*get_next_line(int fd)
 
 	line = 0;
 	lb = 0;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (carry_over != 0)
+	if (carry_over)
 	{
-		//if (ft_strlen(carry))
 		line = ft_calloc(ft_strlen(carry_over) + 1, sizeof(char));
 		if (!line)
 		{
@@ -110,7 +109,7 @@ char	*get_next_line(int fd)
 	if (line)
 	{
 		lb = ft_strchr(line, '\n');
-		if (!lb ) //&& ft_strlen(line) == 0)
+		if (!lb )
 		{
 			carry_over = ft_calloc(1, sizeof(char));
 		}
@@ -126,6 +125,7 @@ char	*get_next_line(int fd)
 			line = post_process(line, lb);
 		}
 	}
-	//	return (line);
+	else
+		return(NULL);
 	return (line);
 }
