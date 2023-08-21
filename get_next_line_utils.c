@@ -1,5 +1,5 @@
 #include "get_next_line.h"
-/*
+
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*ptr;
@@ -19,7 +19,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	}
 	return (ptr);
 }
-*/
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;

@@ -12,20 +12,15 @@
 
 #include "get_next_line.h"
 
-char	*ft_strjoin_fr(char *s1, char const *s2)
+char	*ft_strjoin_fr(char const *s1, char const *s2)
 {
 	size_t	len;
 	char	*ptr;
 
 	if (!s1)
-		//s1 = ft_calloc(1, sizeof(char));
-	{
-		s1 = malloc(1 * sizeof(char));
-		s1[0] = '\0'; 
-	}
+		s1 = ft_calloc(1, sizeof(char));
 	len = ft_strlen(s1) + ft_strlen(s2);
-	//ptr = ft_calloc((len + 1), sizeof(char));
-	ptr = malloc((len + 1) * sizeof(char));
+	ptr = ft_calloc((len + 1), sizeof(char));
 	if (!ptr)
 	{
 		free ((void *)s1);
@@ -51,8 +46,7 @@ char	*read_from_file(int fd, char *line)
 	read_bytes = 1;
 	while (!ft_strchr(line, '\n') && read_bytes != 0)
 	{
-		//buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
-		buff = malloc (BUFFER_SIZE + 1 * sizeof(char));
+		buff = ft_calloc (BUFFER_SIZE + 1, sizeof(char));
 		if (!buff)
 			return (NULL);
 		read_bytes = read(fd, buff, BUFFER_SIZE);
@@ -76,8 +70,7 @@ char	*post_process(char *line, char *lb)
 {
 	char	*temp;
 
-	//temp = ft_calloc(ft_strlen(line) - ft_strlen(lb) + 2, sizeof(char));
-	temp = malloc((ft_strlen(line) - ft_strlen(lb) + 2 )* sizeof(char));
+	temp = ft_calloc(ft_strlen(line) - ft_strlen(lb) + 2, sizeof(char));
 	if (!temp)
 		return (NULL);
 	ft_strlcpy(temp, line, ft_strlen(line) - ft_strlen(lb) + 2);
@@ -97,8 +90,8 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (carry_over != 0)
 	{
-		//line = ft_calloc(ft_strlen(carry_over) + 1, sizeof(char));
-		line = malloc(ft_strlen(carry_over) + 1 * sizeof(char));
+		//if (ft_strlen(carry))
+		line = ft_calloc(ft_strlen(carry_over) + 1, sizeof(char));
 		if (!line)
 		{
 			free (carry_over);
@@ -109,8 +102,7 @@ char	*get_next_line(int fd)
 	}
 	else
 	{
-		//line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-		line = malloc (BUFFER_SIZE + 1 * sizeof(char));
+		line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 		if (!line)
 			return (NULL);
 	}
@@ -120,16 +112,11 @@ char	*get_next_line(int fd)
 		lb = ft_strchr(line, '\n');
 		if (!lb ) //&& ft_strlen(line) == 0)
 		{
-			//carry_over = ft_calloc(1, sizeof(char));
-			carry_over = malloc(1 * sizeof(char));
-			if (!carry_over)
-				return (NULL);
-			carry_over[0] = '\0';
+			carry_over = ft_calloc(1, sizeof(char));
 		}
 		else
 		{
-			//carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
-			carry_over = malloc(ft_strlen(lb) * sizeof(char));
+			carry_over = ft_calloc(ft_strlen(lb), sizeof(char));
 			if (!carry_over)
 			{
 				free (line);
@@ -139,5 +126,6 @@ char	*get_next_line(int fd)
 			line = post_process(line, lb);
 		}
 	}
+	//	return (line);
 	return (line);
 }

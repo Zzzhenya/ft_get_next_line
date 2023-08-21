@@ -35,7 +35,6 @@ int main(int argc, char **argv)
 			if (ptr == NULL)
 				break;
 			printf("[%i]:%i:%s", fd, i, ptr);
-			free(ptr);
 			ptr = NULL;
 			i ++;	
 		}
